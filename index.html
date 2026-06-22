@@ -1,877 +1,527 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>問卷審閱意見 — 竹科工程師生活型態調查</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whale 經濟學驗證報告 v2 — SWAG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070A14;
+      --bg-card: #0C1121;
+      --border: #1A2540;
+      --border-s: #243356;
+      --whale: #D4A853;
+      --whale-dim: #8A6828;
+      --whale-bg: rgba(212,168,83,0.07);
+      --verified: #2ECFAA;
+      --verified-dim: #1A7860;
+      --verified-bg: rgba(46,207,170,0.07);
+      --est: #6B8EDE;
+      --est-bg: rgba(107,142,222,0.07);
+      --flag: #E05A5A;
+      --flag-bg: rgba(224,90,90,0.07);
+      --text: #E2E8F5;
+      --muted: #6B7FA3;
+      --dim: #2E3F60;
+      --font: 'IBM Plex Sans', system-ui, sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.65;
+      padding: 48px 0 80px;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 0 28px; }
 
-  :root {
-    --ink: #1a1a18;
-    --ink-2: #4a4a45;
-    --ink-3: #8a8a82;
-    --surface: #faf9f6;
-    --surface-2: #f2f0ea;
-    --surface-3: #e8e5dc;
-    --red: #c0392b;
-    --red-bg: #fdf0ee;
-    --amber: #b8620a;
-    --amber-bg: #fdf5e8;
-    --green: #2d6a4f;
-    --green-bg: #edf7f1;
-    --blue: #1a4e8a;
-    --blue-bg: #eef4fd;
-    --border: rgba(26,26,24,0.10);
-    --accent: #2c4a8c;
-  }
+    /* header */
+    .hdr { margin-bottom: 36px; padding-bottom: 28px; border-bottom: 0.5px solid var(--border); }
+    .hdr-meta {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
+      margin-bottom: 14px; font-size: 11px; font-family: var(--mono);
+      color: var(--muted); text-transform: uppercase; letter-spacing: .07em;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 9px; border-radius: 3px;
+      font-size: 10px; font-family: var(--mono); letter-spacing: .04em; font-weight: 500;
+    }
+    .b-ok   { background: var(--verified-bg); color: var(--verified); border: .5px solid var(--verified-dim); }
+    .b-est  { background: var(--est-bg);      color: var(--est);      border: .5px solid var(--est); }
+    .b-flag { background: var(--flag-bg);      color: var(--flag);     border: .5px solid var(--flag); }
+    h1 { font-size: 27px; font-weight: 600; line-height: 1.25; margin-bottom: 8px; }
+    h1 em { font-style: normal; color: var(--whale); }
+    .hdr-sub { font-size: 14px; color: var(--muted); }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* section */
+    .sec { margin-bottom: 52px; }
+    .sec-lbl { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .sec-n { font-family: var(--mono); font-size: 10px; color: var(--dim); letter-spacing: .12em; }
+    h2 { font-size: 15px; font-weight: 600; }
 
-  body {
-    font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
-    background: var(--surface);
-    color: var(--ink);
-    font-size: 15px;
-    line-height: 1.8;
-    -webkit-font-smoothing: antialiased;
-  }
+    /* one-liner */
+    .one {
+      background: var(--whale-bg); border: .5px solid var(--whale-dim);
+      border-radius: 8px; padding: 18px 22px; margin-bottom: 36px;
+      font-size: 14px; font-weight: 500; color: var(--whale); line-height: 1.6; text-align: center;
+    }
 
-  /* ── Header ── */
-  .doc-header {
-    background: var(--ink);
-    color: #f5f3ee;
-    padding: 3.5rem 0 3rem;
-  }
-  .doc-header .inner {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 0 2.5rem;
-  }
-  .doc-type {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: .14em;
-    color: rgba(245,243,238,.45);
-    text-transform: uppercase;
-    margin-bottom: 1.25rem;
-  }
-  h1 {
-    font-size: clamp(22px, 4vw, 32px);
-    font-weight: 700;
-    line-height: 1.35;
-    letter-spacing: -.01em;
-    margin-bottom: 1rem;
-  }
-  .meta-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .5rem 1.5rem;
-    font-size: 13px;
-    color: rgba(245,243,238,.55);
-    font-family: 'DM Mono', monospace;
-  }
-  .meta-row span::before { content: "· "; }
+    /* power-law */
+    .pc { background: var(--bg-card); border: .5px solid var(--border); border-radius: 8px; padding: 26px 24px; }
+    .pc-lbl { font-size: 10px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 22px; }
+    .br { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .bt { width: 72px; font-size: 12px; color: var(--muted); text-align: right; flex-shrink: 0; font-family: var(--mono); }
+    .bk { flex: 1; height: 26px; background: rgba(255,255,255,.03); border-radius: 3px; overflow: hidden; border: .5px solid var(--border); }
+    .bf {
+      height: 100%; border-radius: 2px; display: flex; align-items: center;
+      padding-left: 10px; font-size: 11px; font-weight: 600; font-family: var(--mono);
+      transition: width 1.4s cubic-bezier(.22,1,.36,1); width: 0;
+    }
+    .fw { background: var(--whale); color: #1A0E00; }
+    .fd { background: var(--est); color: #0A0E2A; }
+    .fm { background: #1E2D4A; color: var(--muted); }
+    .bp { width: 62px; text-align: right; font-size: 11px; color: var(--muted); font-family: var(--mono); flex-shrink: 0; }
+    .ps { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 22px; padding-top: 22px; border-top: .5px solid var(--border); }
+    .pi { display: flex; flex-direction: column; gap: 3px; }
+    .pn { font-size: 26px; font-weight: 600; font-family: var(--mono); line-height: 1; }
+    .pl { font-size: 11px; color: var(--muted); }
 
-  /* ── Layout ── */
-  .page {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 3rem 2.5rem 5rem;
-  }
+    /* two-path */
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .path {
+      background: var(--bg-card); border: .5px solid var(--border);
+      border-radius: 8px; padding: 18px 18px 16px;
+    }
+    .path.p-acq { border-top: 2px solid var(--est); }
+    .path.p-grad { border-top: 2px solid var(--whale); }
+    .path-head {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 12px; padding-bottom: 12px; border-bottom: .5px solid var(--border);
+    }
+    .path-icon { font-size: 15px; }
+    .path-title { font-size: 13px; font-weight: 600; }
+    .path-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .path-q {
+      font-size: 11px; color: var(--muted); line-height: 1.55;
+      margin-bottom: 10px;
+    }
+    .path-q strong { color: var(--text); font-weight: 500; }
+    .path-note {
+      font-size: 11px; font-family: var(--mono);
+      padding: 6px 10px; border-radius: 4px;
+    }
+    .note-est  { background: var(--est-bg);   color: var(--est);   border: .5px solid var(--est); }
+    .note-warn { background: var(--flag-bg);   color: var(--flag);  border: .5px solid var(--flag); }
+    .path-blind {
+      margin-top: 10px; font-size: 11px; color: var(--flag);
+      padding: 8px 10px; border-radius: 4px;
+      background: var(--flag-bg); border: .5px solid var(--flag);
+    }
 
-  /* ── Sections ── */
-  .section { margin-bottom: 3.5rem; }
-  .section-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-    padding-bottom: .6rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 1.5rem;
-  }
+    /* tier table */
+    .tw { background: var(--bg-card); border: .5px solid var(--border); border-radius: 8px; overflow: hidden; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    thead tr { background: rgba(255,255,255,.02); }
+    th {
+      padding: 11px 13px; text-align: left; font-size: 10px; font-family: var(--mono);
+      text-transform: uppercase; letter-spacing: .07em; color: var(--muted); font-weight: 500;
+      border-bottom: .5px solid var(--border); white-space: nowrap;
+    }
+    td { padding: 11px 13px; border-bottom: .5px solid var(--border); color: var(--text); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    .cw  { color: var(--whale); font-weight: 600; }
+    .cd  { color: var(--est); }
+    .cm  { color: var(--muted); }
+    .cf  { color: var(--flag); font-size: 11px; }
+    .cmo { font-family: var(--mono); font-size: 11px; }
+    .rw  { background: rgba(212,168,83,.04); }
 
-  h2 {
-    font-size: 19px;
-    font-weight: 700;
-    margin-bottom: .6rem;
-    letter-spacing: -.01em;
-  }
-  h3 {
-    font-size: 15px;
-    font-weight: 500;
-    margin-bottom: .4rem;
-  }
+    /* ── OBSERVATION SYSTEM ── */
+    .obs-intro {
+      font-size: 13px; color: var(--muted); line-height: 1.7;
+      margin-bottom: 22px;
+    }
+    .obs-intro strong { color: var(--text); font-weight: 500; }
 
-  p { margin-bottom: .9rem; color: var(--ink-2); }
-  p:last-child { margin-bottom: 0; }
+    .layers { display: flex; flex-direction: column; gap: 0; }
 
-  /* ── Callout ── */
-  .callout {
-    border-left: 3px solid var(--accent);
-    background: var(--blue-bg);
-    padding: 1rem 1.25rem;
-    border-radius: 0 6px 6px 0;
-    margin: 1.5rem 0;
-    font-size: 14px;
-    color: var(--ink-2);
-    line-height: 1.75;
-  }
-  .callout strong { color: var(--blue); }
+    .layer {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      border: .5px solid var(--border);
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .layer:first-child { border-radius: 8px 8px 0 0; }
+    .layer:last-child  { border-radius: 0 0 8px 8px; }
+    .layer + .layer    { border-top: none; }
 
-  /* ── Issue cards ── */
-  .issue-list { display: flex; flex-direction: column; gap: .75rem; }
-  .issue {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    background: white;
-  }
-  .issue-head {
-    display: flex;
-    align-items: flex-start;
-    gap: .75rem;
-    padding: .9rem 1.1rem;
-  }
-  .issue-body-wrap {
-    padding: 0 1.1rem .9rem 3.1rem;
-    font-size: 13.5px;
-    color: var(--ink-2);
-    line-height: 1.75;
-  }
-  .issue-body-wrap ul {
-    padding-left: 1.1rem;
-    margin-top: .2rem;
-  }
-  .issue-body-wrap li { margin-bottom: .25rem; }
-  .sev-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    margin-top: 6px;
-  }
-  .sev-high { background: var(--red); }
-  .sev-mid  { background: var(--amber); }
-  .sev-low  { background: var(--green); }
-  .issue-title { font-size: 14px; font-weight: 500; color: var(--ink); }
-  .sev-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    padding: 1px 7px;
-    border-radius: 3px;
-    margin-left: auto;
-    flex-shrink: 0;
-    letter-spacing: .04em;
-  }
-  .sev-tag.high { background: var(--red-bg); color: var(--red); }
-  .sev-tag.mid  { background: var(--amber-bg); color: var(--amber); }
-  .sev-tag.low  { background: var(--green-bg); color: var(--green); }
+    .layer-id {
+      background: rgba(255,255,255,.02);
+      padding: 20px 18px;
+      border-right: .5px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+    }
+    .layer-num { font-family: var(--mono); font-size: 10px; color: var(--dim); letter-spacing: .1em; }
+    .layer-name { font-size: 13px; font-weight: 600; }
+    .layer-en   { font-size: 11px; color: var(--muted); }
+    .layer-body { padding: 20px 20px 18px; display: flex; flex-direction: column; gap: 10px; }
 
-  /* ── Q comparison table ── */
-  .q-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 1rem; }
-  .q-table th {
-    text-align: left;
-    font-size: 11px;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: .07em;
-    color: var(--ink-3);
-    text-transform: uppercase;
-    padding: .5rem .75rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .q-table td {
-    padding: .65rem .75rem;
-    vertical-align: top;
-    border-bottom: 1px solid var(--border);
-    color: var(--ink-2);
-    line-height: 1.6;
-  }
-  .q-table tr:last-child td { border-bottom: none; }
-  .q-table tr:hover td { background: var(--surface-2); }
-  .badge {
-    display: inline-block;
-    font-size: 10px;
-    font-family: 'DM Mono', monospace;
-    padding: 1px 6px;
-    border-radius: 3px;
-  }
-  .badge.new    { background: var(--blue-bg); color: var(--blue); }
-  .badge.mod    { background: var(--amber-bg); color: var(--amber); }
-  .badge.keep   { background: var(--green-bg); color: var(--green); }
-  .badge.remove { background: var(--red-bg); color: var(--red); }
+    .layer-q {
+      font-size: 12px; font-weight: 500; color: var(--text);
+      padding-bottom: 10px; border-bottom: .5px solid var(--border);
+      line-height: 1.5;
+    }
+    .layer-q span { color: var(--muted); font-weight: 400; }
 
-  /* ── Full question block ── */
-  .q-block {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    margin-bottom: .75rem;
-    background: white;
-    overflow: hidden;
-  }
-  .q-block-head {
-    display: flex;
-    align-items: baseline;
-    gap: .75rem;
-    padding: .8rem 1.1rem;
-    background: var(--surface-2);
-    border-bottom: 1px solid var(--border);
-  }
-  .q-num-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--ink-3);
-    flex-shrink: 0;
-    min-width: 28px;
-  }
-  .q-block-text { font-size: 14px; font-weight: 500; color: var(--ink); flex: 1; }
-  .q-block-body {
-    padding: .75rem 1.1rem;
-    font-size: 13px;
-    color: var(--ink-2);
-  }
-  .q-block-body .opts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .3rem;
-    margin-top: .4rem;
-  }
-  .opt-pill {
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 2px 9px;
-    font-size: 12px;
-    color: var(--ink-2);
-  }
-  .opt-pill.new-opt { background: var(--blue-bg); border-color: rgba(26,78,138,.15); color: var(--blue); }
-  .q-type-note {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--ink-3);
-    margin-top: .5rem;
-  }
-  .section-divider {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: white;
-    background: var(--ink-2);
-    padding: .45rem 1.1rem;
-    margin: .5rem 0 .75rem;
-    border-radius: 4px;
-    display: inline-block;
-  }
+    .metrics { display: flex; flex-wrap: wrap; gap: 8px; }
+    .metric {
+      font-size: 11px; font-family: var(--mono);
+      padding: 4px 10px; border-radius: 4px;
+      border: .5px solid var(--border-s);
+      color: var(--muted); background: rgba(255,255,255,.02);
+    }
+    .metric.hi { color: var(--whale); border-color: var(--whale-dim); background: var(--whale-bg); }
+    .metric.mi { color: var(--est);   border-color: var(--est);        background: var(--est-bg); }
+    .metric.vi { color: var(--verified); border-color: var(--verified-dim); background: var(--verified-bg); }
+    .metric.fi { color: var(--flag);  border-color: var(--flag);       background: var(--flag-bg); }
 
-  /* ── Flow diagram ── */
-  .flow {
-    display: flex;
-    align-items: stretch;
-    gap: 0;
-    margin: 1.25rem 0;
-  }
-  .flow-step {
-    flex: 1;
-    text-align: center;
-    padding: .9rem .5rem;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    position: relative;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--ink);
-  }
-  .flow-step:first-child { border-radius: 6px 0 0 6px; }
-  .flow-step:last-child  { border-radius: 0 6px 6px 0; }
-  .flow-step:not(:last-child) { border-right: none; }
-  .flow-step:not(:last-child)::after {
-    content: "›";
-    position: absolute;
-    right: -9px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 16px;
-    color: var(--ink-3);
-    background: var(--surface);
-    z-index: 2;
-    padding: 0 1px;
-  }
-  .flow-sub { font-size: 10px; color: var(--ink-3); font-weight: 400; margin-top: 2px; }
+    .layer-signal {
+      font-size: 11px; color: var(--muted); line-height: 1.55;
+      padding: 8px 10px; border-radius: 4px;
+      border: .5px solid var(--border); background: rgba(255,255,255,.01);
+    }
+    .layer-signal strong { color: var(--text); font-weight: 500; }
 
-  /* ── Footer ── */
-  footer {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 2rem 2.5rem;
-    border-top: 1px solid var(--border);
-    font-size: 12px;
-    color: var(--ink-3);
-    font-family: 'DM Mono', monospace;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: .5rem;
-  }
+    /* cross-cut */
+    .xcut {
+      margin-top: 12px;
+      background: var(--whale-bg); border: .5px solid var(--whale-dim); border-radius: 8px;
+      padding: 18px 20px;
+      display: grid; grid-template-columns: 180px 1fr; gap: 0;
+    }
+    .xcut-id {
+      display: flex; flex-direction: column; gap: 5px; justify-content: center;
+      padding-right: 20px; border-right: .5px solid var(--whale-dim);
+    }
+    .xcut-tag { font-family: var(--mono); font-size: 10px; color: var(--whale-dim); letter-spacing: .1em; }
+    .xcut-name { font-size: 13px; font-weight: 600; color: var(--whale); }
+    .xcut-body { padding-left: 20px; display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+    .xcut-q { font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.5; }
+    .xcut-sub { font-size: 12px; color: var(--muted); line-height: 1.55; }
+    .xcut-sub strong { color: var(--whale); font-weight: 500; }
 
-  @media (max-width: 600px) {
-    .page { padding: 2rem 1.25rem 4rem; }
-    .doc-header .inner { padding: 0 1.25rem; }
-    .flow { flex-direction: column; }
-    .flow-step:first-child { border-radius: 6px 6px 0 0; }
-    .flow-step:last-child  { border-radius: 0 0 6px 6px; }
-    .flow-step:not(:last-child) { border-right: 1px solid var(--border); border-bottom: none; }
-    .flow-step:not(:last-child)::after { content: "↓"; right: auto; left: 50%; transform: translateX(-50%); bottom: -12px; top: auto; }
-    footer { flex-direction: column; }
-  }
-</style>
+    /* divider */
+    .div { height: .5px; background: var(--border); margin: 8px 0 40px; }
+
+    /* action items — minimal */
+    .actions { display: flex; flex-direction: column; gap: 0; }
+    .action-row {
+      display: grid; grid-template-columns: 28px 1fr auto;
+      gap: 14px; align-items: center;
+      padding: 16px 0;
+      border-bottom: .5px solid var(--border);
+    }
+    .action-row:last-child { border-bottom: none; }
+    .an { font-family: var(--mono); font-size: 11px; color: var(--dim); }
+    .at { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.4; }
+    .at em { font-style: normal; color: var(--muted); font-weight: 400; font-size: 12px; display: block; margin-top: 3px; }
+    .atags { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+    .tag {
+      font-size: 10px; font-family: var(--mono); padding: 2px 8px; border-radius: 3px;
+      white-space: nowrap; background: rgba(255,255,255,.03);
+      border: .5px solid var(--border-s); color: var(--muted);
+    }
+    .tag.s { background: var(--whale-bg); border-color: var(--whale-dim); color: var(--whale); }
+
+    /* footer */
+    .ftr {
+      padding-top: 24px; border-top: .5px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 11px; color: var(--dim); font-family: var(--mono);
+    }
+
+    @media (max-width: 620px) {
+      .two { grid-template-columns: 1fr; }
+      .layer, .xcut { grid-template-columns: 1fr; }
+      .layer-id, .xcut-id { border-right: none; border-bottom: .5px solid var(--border); padding: 14px; }
+      .xcut-body { padding-left: 0; padding-top: 14px; }
+      .ps { gap: 18px; }
+    }
+  </style>
 </head>
 <body>
+<div class="wrap">
 
-<header class="doc-header">
-  <div class="inner">
-    <div class="doc-type">Review Memo · Internal</div>
-    <h1>問卷審閱意見<br>竹科工程師生活型態與線下互動行為調查</h1>
-    <div class="meta-row">
-      <span>2026 年 5 月</span>
-      <span>共 10 項建議</span>
-      <span>優化版問卷附於文末</span>
+  <!-- header -->
+  <div class="hdr">
+    <div class="hdr-meta">
+      <span>SWAG.LIVE</span><span style="color:var(--dim)">—</span>
+      <span>內部策略文件</span><span style="color:var(--dim)">—</span>
+      <span id="doc-date"></span>
+      <span style="margin-left:auto"><span class="badge b-ok">✓ 框架修正版</span></span>
+    </div>
+    <h1>Whale 經濟學 <em>觀測框架</em></h1>
+    <p class="hdr-sub">驗證分層 LTV 邏輯，修正歸因偏差，建構雙路徑 Whale 觀測體系</p>
+  </div>
+
+  <!-- one-liner -->
+  <div class="one">
+    Whale 有兩種來源：<strong style="color:#F0C878">流量帶進來的</strong>，以及<strong style="color:#F0C878">平台自己養出來的</strong>——兩條路都需要觀測，只看其中一條會誤判所有決策。
+  </div>
+
+  <!-- 01 power-law -->
+  <div class="sec">
+    <div class="sec-lbl"><span class="sec-n">01</span><h2>為何 Whale 是核心計算單位</h2></div>
+    <div class="pc">
+      <div class="pc-lbl">營收集中度 ── 過去 6 個月，SWAG Mixpanel 實際資料</div>
+      <div class="br">
+        <div class="bt">Whale 5%</div>
+        <div class="bk"><div class="bf fw" id="bw">72%</div></div>
+        <div class="bp">72% 營收</div>
+      </div>
+      <div class="br">
+        <div class="bt">Dolphin 15%</div>
+        <div class="bk"><div class="bf fd" id="bd">~20%</div></div>
+        <div class="bp">~20% 營收</div>
+      </div>
+      <div class="br">
+        <div class="bt">Minnow 80%</div>
+        <div class="bk"><div class="bf fm" id="bm">~8%</div></div>
+        <div class="bp">~8% 營收</div>
+      </div>
+      <div class="ps">
+        <div class="pi"><span class="pn" style="color:var(--whale)">$2,470</span><span class="pl">Whale 6 個月 GMV（已驗證）</span></div>
+        <div class="pi"><span class="pn" style="color:var(--est)">$545</span><span class="pl">Whale 月 ARPU（估算）</span></div>
+        <div class="pi"><span class="pn" style="color:var(--muted)">$11</span><span class="pl">Minnow 6 個月 GMV（已驗證）</span></div>
+        <div class="pi"><span class="pn" style="color:var(--verified)">8×</span><span class="pl">Whale vs. Blended 平台 LTV 倍數</span></div>
+      </div>
     </div>
   </div>
-</header>
 
-<main class="page">
-
-  <!-- 前言 -->
-  <section class="section">
-    <div class="section-label">前言</div>
-    <p>這份問卷想了解竹科工程師在下班路上對品牌體驗活動的即時反應，研究方向清楚，問題也都有對應的場景。整體框架是對的，只需要在幾個細節上做調整，資料品質就能大幅提升。</p>
-    <p>以下意見分成三個層次：<strong>會影響資料可用性的問題</strong>（高優先，需修）、<strong>影響分析深度的結構問題</strong>（建議調整）、<strong>提升填答體驗的細節</strong>（選擇性優化）。</p>
-    <div class="callout">
-      <strong>核心問題是：問卷目前無法確認誰在填。</strong>沒有篩選題，外部人員填進來的資料事後無法剔除，整個樣本的可信度就會打折扣。這一題要先補。
+  <!-- 02 two paths -->
+  <div class="sec">
+    <div class="sec-lbl"><span class="sec-n">02</span><h2>框架修正：Whale 的兩條來源路徑</h2></div>
+    <div class="two">
+      <div class="path p-acq">
+        <div class="path-head">
+          <span class="path-title" style="color:var(--est)">路徑 A｜流量帶進</span>
+        </div>
+        <div class="path-q">某些頭部的受眾本身就有<strong>高消費傾向</strong>，他帶誰進來，平台就撿到 whale 預備軍。</div>
+        <div class="path-q">核心問題：<strong>這個頭部帶來的用戶，30 天內 ≥$100 的比例是多少？</strong></div>
+        <div class="path-note note-est">現有框架已覆蓋此路徑</div>
+      </div>
+      <div class="path p-grad">
+        <div class="path-head">
+          <span class="path-title" style="color:var(--whale)">路徑 B｜平台養成</span>
+        </div>
+        <div class="path-q">用戶進來時只是 minnow，<strong>平台的機制</strong>（排行榜、禮物特效、VIP 通知、AI 互動）讓他逐漸升級成 whale。</div>
+        <div class="path-q">核心問題：<strong>從第一次付費到跨越 whale 門檻，平均要多久？哪些行為觸發了升級？</strong></div>
+        <div class="path-blind">原始框架完全缺失此路徑——把 whale 的功勞全歸給帶他進來的頭部</div>
+      </div>
     </div>
-  </section>
+  </div>
 
-  <!-- 問題診斷 -->
-  <section class="section">
-    <div class="section-label">問題診斷</div>
+  <!-- 03 tier table -->
+  <div class="sec">
+    <div class="sec-lbl"><span class="sec-n">03</span><h2>分層 LTV 數字（含待補項）</h2></div>
+    <div class="tw">
+      <table>
+        <thead>
+          <tr>
+            <th>Tier</th><th>門檻</th><th>占人數</th><th>占營收</th>
+            <th>月 ARPU</th><th>平台 LTV 12月</th><th>合理 CAC</th><th>狀態</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="rw">
+            <td class="cw">Whale</td><td class="cmo cw">≥$500/6mo</td><td>~5%</td><td class="cw">~72%</td>
+            <td>~$545</td><td class="cw">~$2,800</td><td class="cw">~$1,000</td>
+            <td><span class="badge b-ok">✓ 已驗證</span></td>
+          </tr>
+          <tr>
+            <td class="cd">Dolphin</td><td class="cmo cm">$100–499/6mo</td><td>~15%</td><td class="cd">~20%</td>
+            <td class="cm">TBD</td><td class="cm">TBD</td><td class="cm">TBD</td>
+            <td><span class="badge b-flag">⚠ 待拉資料</span></td>
+          </tr>
+          <tr>
+            <td class="cm">Minnow</td><td class="cmo cm">&lt;$100/6mo</td><td>~80%</td><td class="cm">~8%</td>
+            <td>~$2</td><td class="cm">&lt;$50</td><td class="cm">&lt;$30</td>
+            <td><span class="badge b-est">~ 估算</span></td>
+          </tr>
+          <tr>
+            <td class="cm" style="font-style:italic">Blended</td><td class="cmo cm">—</td><td>—</td><td class="cm">100%</td>
+            <td>~$93</td><td class="cm">~$340</td><td class="cf">⚠ 勿用於 CAC 決策</td>
+            <td><span class="badge b-ok">✓ 已驗證</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-    <div class="issue-list">
+  <!-- 04 observation system -->
+  <div class="sec">
+    <div class="sec-lbl"><span class="sec-n">04</span><h2>環繞 Whale 的數據觀測架構</h2></div>
 
-      <div class="issue">
-        <div class="issue-head">
-          <span class="sev-dot sev-high"></span>
-          <div>
-            <div class="issue-title">缺乏篩選題，無法保證樣本品質</div>
+    <p class="obs-intro">
+      三層縱向觀測，追蹤 whale 從<strong>流入、養成到存量健康</strong>的完整生命週期；加一個橫切維度，把 creator 對「養成」的貢獻從「帶進」中分離出來。
+    </p>
+
+    <div class="layers">
+
+      <!-- Layer 1 -->
+      <div class="layer">
+        <div class="layer-id">
+          <span class="layer-num">LAYER 01</span>
+          <span class="layer-name" style="color:var(--est)">流入觀測</span>
+          <span class="layer-en">Inflow</span>
+        </div>
+        <div class="layer-body">
+          <div class="layer-q">
+            誰帶來有 whale 傾向的用戶？<span>——觀測新 whale 的入口來源結構</span>
           </div>
-          <span class="sev-tag high">高</span>
-        </div>
-        <div class="issue-body-wrap">
-          現在的問卷沒有確認受訪者是否真的在竹科工作。任何人都可以填，但研究的對象是「園區工程師的下班行為」，樣本不對，結論就沒有根據。<br><br>
-          <strong>修法：</strong>加第一題「您目前是否在新竹科學園區或周邊工作？」，選「否」的直接跳到感謝頁。
-        </div>
-      </div>
-
-      <div class="issue">
-        <div class="issue-head">
-          <span class="sev-dot sev-high"></span>
-          <div>
-            <div class="issue-title">第 4 題同時問兩件事（雙桶問題）</div>
+          <div class="metrics">
+            <span class="metric mi">new whale/月 by 來源</span>
+            <span class="metric mi">D30 ≥$100 early signal</span>
+            <span class="metric">whale acquisition rate 趨勢</span>
+            <span class="metric">per-Creator whale yield %</span>
           </div>
-          <span class="sev-tag high">高</span>
-        </div>
-        <div class="issue-body-wrap">
-          「最近一次讓你主動停下來看的東西是什麼？為什麼？」把「內容」和「原因」都塞在同一格開放題裡。受訪者常只回答其中一部分，分析也很難處理。<br><br>
-          <strong>修法：</strong>「是什麼」改成選項題（展示、補給、表演等），「為什麼」保留為簡短開放題，兩題分開。
-        </div>
-      </div>
-
-      <div class="issue">
-        <div class="issue-head">
-          <span class="sev-dot sev-high"></span>
-          <div>
-            <div class="issue-title">沒有量化態度的題目</div>
+          <div class="layer-signal">
+            <strong>早期訊號</strong>：imported cohort 前 30 天花 ≥$100 的比例——不用等 6 個月，1 個月內就知道這個頭部帶的是哪種人。
           </div>
-          <span class="sev-tag high">高</span>
-        </div>
-        <div class="issue-body-wrap">
-          全部都是「選哪個」的名目題，知道「大家偏好 A 多於 B」，但不知道這個偏好的強度。之後如果要比較不同族群或做相關分析，現有的題型做不到。<br><br>
-          <strong>修法：</strong>加一題 5 點量表：「你有多願意在路邊參與一個陌生品牌的體驗活動？」1 = 完全不願意，5 = 非常願意。
         </div>
       </div>
 
-      <div class="issue">
-        <div class="issue-head">
-          <span class="sev-dot sev-high"></span>
-          <div>
-            <div class="issue-title">導言資訊不足，信任感低</div>
+      <!-- Layer 2 -->
+      <div class="layer">
+        <div class="layer-id">
+          <span class="layer-num">LAYER 02</span>
+          <span class="layer-name" style="color:var(--whale)">養成觀測</span>
+          <span class="layer-en">Graduation</span>
+        </div>
+        <div class="layer-body">
+          <div class="layer-q">
+            平台把多少 minnow 升級成了 whale？<span>——觀測消費層級的流動</span>
           </div>
-          <span class="sev-tag high">高</span>
-        </div>
-        <div class="issue-body-wrap">
-          現在只有一句說明。業界研究發現，導言有沒有說清楚「填多久、資料怎麼用、誰主辦」，完成率差距可達 15–25%。<br><br>
-          <strong>修法：</strong>導言加入：填寫約 3 分鐘、資料僅供內部使用、完全匿名、由誰主導這份研究。
-        </div>
-      </div>
-
-      <div class="issue">
-        <div class="issue-head">
-          <span class="sev-dot sev-mid"></span>
-          <div>
-            <div class="issue-title">人口統計放在開頭，影響填答意願</div>
+          <div class="metrics">
+            <span class="metric hi">minnow→whale graduation rate</span>
+            <span class="metric hi">median time-to-whale</span>
+            <span class="metric">tier 升級速率 by cohort</span>
+            <span class="metric">graduation 前的行為序列</span>
           </div>
-          <span class="sev-tag mid">中</span>
-        </div>
-        <div class="issue-body-wrap">
-          職能、年資這種背景資料放開頭，會讓問卷感覺像人資表格，受訪者還沒看到有趣的問題就先產生抗拒。市調標準做法是人口統計放末段。<br><br>
-          <strong>修法：</strong>職能、年資移到倒數 2–3 題，同時補上年齡層（現在沒有）。
-        </div>
-      </div>
-
-      <div class="issue">
-        <div class="issue-head">
-          <span class="sev-dot sev-mid"></span>
-          <div>
-            <div class="issue-title">文案偏好題只有 3 個選項且未說明情境</div>
+          <div class="layer-signal">
+            <strong>關鍵假設待驗</strong>：graduation 是被<strong>平台機制</strong>驅動（排行榜、禮物特效、VIP 通知），還是用戶本身就有升級傾向？找到那個觸發事件，才知道該優化哪裡。
           </div>
-          <span class="sev-tag mid">中</span>
-        </div>
-        <div class="issue-body-wrap">
-          最後一題的文案偏好測試方向很好，但 3 個選項偏少，且沒有告訴受訪者「這句話是在什麼場景出現的」。受訪者不知道是看到廣告還是路邊立牌，偏好就缺乏情境根據。<br><br>
-          <strong>修法：</strong>加一句場景說明（「假設你在下班路上看到一個體驗攤位旁邊的立牌寫著…」），選項擴充到 4–5 個，改成排序題而非單選。
         </div>
       </div>
 
-      <div class="issue">
-        <div class="issue-head">
-          <span class="sev-dot sev-mid"></span>
-          <div>
-            <div class="issue-title">部分選項語義重疊或分類邏輯不一致</div>
+      <!-- Layer 3 -->
+      <div class="layer">
+        <div class="layer-id">
+          <span class="layer-num">LAYER 03</span>
+          <span class="layer-name" style="color:var(--verified)">存量觀測</span>
+          <span class="layer-en">Stock Health</span>
+        </div>
+        <div class="layer-body">
+          <div class="layer-q">
+            現有 whale 是在成長、持平、還是悄悄流失？<span>——觀測存量 whale 的健康度</span>
           </div>
-          <span class="sev-tag mid">中</span>
-        </div>
-        <div class="issue-body-wrap">
-          <ul>
-            <li>Q5「很少見」vs「有科技感／互動感」——兩個概念有重疊，受訪者難以選擇</li>
-            <li>Q7 回饋選項混合了物質型（補給、小物）和心理型（成就感、身份感），沒有標示分類，分析時難以解讀</li>
-            <li>Q8 分享觸發因素把「內容特質」和「社交信號」混在一起，結果不好做群組解析</li>
-          </ul>
-          <br>
-          <strong>修法：</strong>合併或拆分重疊選項；Q7 在視覺上區分「物質型 / 身份型 / 成就型」三類。
-        </div>
-      </div>
-
-      <div class="issue">
-        <div class="issue-head">
-          <span class="sev-dot sev-low"></span>
-          <div>
-            <div class="issue-title">問題缺乏分段，視覺上容易疲勞</div>
+          <div class="metrics">
+            <span class="metric vi">whale active rate（30 天內有消費）</span>
+            <span class="metric vi">whale spend trajectory</span>
+            <span class="metric fi">連續 2 月下滑 = 預警</span>
+            <span class="metric">whale 濃度風險（前 10 名占比）</span>
           </div>
-          <span class="sev-tag low">低</span>
-        </div>
-        <div class="issue-body-wrap">
-          12 題平鋪直敘，受訪者看不出主題脈絡。用區段標題分成「你的下班日常」→「對活動的反應」→「關於你」三塊，填答節奏會好很多。
-        </div>
-      </div>
-
-      <div class="issue">
-        <div class="issue-head">
-          <span class="sev-dot sev-low"></span>
-          <div>
-            <div class="issue-title">缺乏後續聯繫的蒐集機制</div>
+          <div class="layer-signal">
+            <strong>濃度風險</strong>：如果前 10 個 whale 貢獻了 whale 總消費的 60%+，任何一個流失都會在財報上留下痕跡。需要主動監控，而不是等到發現時再追。
           </div>
-          <span class="sev-tag low">低</span>
-        </div>
-        <div class="issue-body-wrap">
-          問卷結束後如果要做深度訪談或焦點團體，沒有辦法找到有意願的受訪者。建議最後加一個選填題：「是否願意參與 15 分鐘深訪？如願意請留 Email。」
-        </div>
-      </div>
-
-      <div class="issue">
-        <div class="issue-head">
-          <span class="sev-dot sev-low"></span>
-          <div>
-            <div class="issue-title">缺少年齡層，人口統計不完整</div>
-          </div>
-          <span class="sev-tag low">低</span>
-        </div>
-        <div class="issue-body-wrap">
-          目前只有職能和年資，沒有年齡。年資和年齡不完全相關（有人 30 歲才入行），兩個都要才能做完整的族群交叉分析。<br><br>
-          <strong>建議選項：</strong>24 歲以下 / 25–29 / 30–34 / 35–39 / 40 歲以上
         </div>
       </div>
 
     </div>
-  </section>
 
-  <!-- 建議結構 -->
-  <section class="section">
-    <div class="section-label">建議問卷結構</div>
-    <p>調整後建議用五段式流程，共約 15 題，填寫時間控制在 4 分鐘以內：</p>
-
-    <div class="flow">
-      <div class="flow-step">篩選題<div class="flow-sub">1 題</div></div>
-      <div class="flow-step">行為脈絡<div class="flow-sub">3–4 題</div></div>
-      <div class="flow-step">活動反應<div class="flow-sub">5–6 題</div></div>
-      <div class="flow-step">文案偏好<div class="flow-sub">2 題</div></div>
-      <div class="flow-step">人口統計<div class="flow-sub">3–4 題</div></div>
-    </div>
-
-    <p style="margin-top:.75rem">題目對照表：</p>
-    <table class="q-table">
-      <thead>
-        <tr>
-          <th>新題號</th>
-          <th>題目</th>
-          <th>原題</th>
-          <th>變動</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>篩 Q0</td><td>您目前是否在竹科或周邊工作？</td><td>無</td><td><span class="badge new">新增</span></td></tr>
-        <tr><td>Q1</td><td>你平常下班時間大約幾點？</td><td>Q3</td><td><span class="badge keep">保留</span></td></tr>
-        <tr><td>Q2</td><td>下班後你最常處於哪種狀態？</td><td>Q10</td><td><span class="badge mod">前移</span></td></tr>
-        <tr><td>Q3</td><td>通勤路上讓你停下來的，是哪種類型？（選項化）</td><td>Q4 上半</td><td><span class="badge mod">拆分+改選項</span></td></tr>
-        <tr><td>Q4</td><td>吸引你的核心原因是什麼？（開放）</td><td>Q4 下半</td><td><span class="badge mod">拆分</span></td></tr>
-        <tr><td>Q5</td><td>最可能讓你停下來的原因？（多選 2）</td><td>Q5</td><td><span class="badge mod">選項優化</span></td></tr>
-        <tr><td>Q6</td><td>你希望體驗控制在多久以內？</td><td>Q6</td><td><span class="badge keep">保留</span></td></tr>
-        <tr><td>Q7</td><td>你有多願意參與陌生品牌的路邊活動？（1–5 分）</td><td>無</td><td><span class="badge new">新增</span></td></tr>
-        <tr><td>Q8</td><td>哪種回饋最可能讓你參與？（含分類標示）</td><td>Q7</td><td><span class="badge mod">選項重整</span></td></tr>
-        <tr><td>Q9</td><td>哪些因素最容易讓你略過活動？</td><td>Q9</td><td><span class="badge keep">保留</span></td></tr>
-        <tr><td>Q10</td><td>以下文案讓你最想靠近的排序？（排序題）</td><td>Q12</td><td><span class="badge mod">擴充+改排序</span></td></tr>
-        <tr><td>Q11</td><td>什麼情況下你會分享活動給同事？</td><td>Q8</td><td><span class="badge mod">選項重整</span></td></tr>
-        <tr><td>Q12</td><td>你看過最有工程師感的品牌活動是什麼？（開放）</td><td>Q11</td><td><span class="badge keep">保留</span></td></tr>
-        <tr><td>Q13–15</td><td>職能類型 / 工作年資 / 年齡層</td><td>Q1–2</td><td><span class="badge mod">後移+加年齡</span></td></tr>
-        <tr><td>末 Q</td><td>是否願意參與後續深訪？（選填 Email）</td><td>無</td><td><span class="badge new">新增</span></td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <!-- 優化版全文 -->
-  <section class="section">
-    <div class="section-label">優化版問卷全文</div>
-    <p>以下可直接貼入 Google Forms。括號內為題目設定說明，貼入時刪除。</p>
-
-    <!-- 導言 -->
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">導言</span>
-        <span class="q-block-text">竹科工程師生活型態與線下互動行為調查</span>
-        <span class="badge mod">優化</span>
+    <!-- cross-cut -->
+    <div class="xcut">
+      <div class="xcut-id">
+        <span class="xcut-tag">橫切維度</span>
+        <span class="xcut-name">Creator 養成力</span>
       </div>
-      <div class="q-block-body">
-        感謝你抽空填寫！這份問卷正在研究竹科工程師在通勤與下班路上的真實行為與偏好，目的是了解什麼樣的線下體驗設計對你真的有意義。<br><br>
-        資料僅供內部研究使用，<strong>完全匿名</strong>，不會用於商業推廣。填寫時間約 <strong>3–4 分鐘</strong>。
-      </div>
-    </div>
-
-    <!-- 篩選 -->
-    <div class="section-divider">篩選</div>
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q0 *</span>
-        <span class="q-block-text">您目前是否在新竹科學園區或周邊企業工作？</span>
-        <span class="badge new">新增</span>
-      </div>
-      <div class="q-block-body">
-        <div class="opts">
-          <span class="opt-pill">是，目前在竹科工作</span>
-          <span class="opt-pill">否（→ 感謝您的時間，問卷到此結束）</span>
+      <div class="xcut-body">
+        <div class="xcut-q">同一批 minnow，在不同 creator 直播間的 graduation rate 是否不同？</div>
+        <div class="xcut-sub">
+          這個問題把兩類 creator 分開：<strong>吸引現有 whale 的 creator</strong>（帶進來就是 whale），和<strong>製造 whale 的 creator</strong>（他的直播間讓 minnow 願意花更多）。兩者同樣有價值，但策略完全不同——前者靠受眾篩選，後者靠直播間的氛圍與互動設計。
         </div>
-        <div class="q-type-note">單選 · 答「否」跳至感謝頁</div>
       </div>
     </div>
+  </div>
 
-    <!-- Section 1 -->
-    <div class="section-divider">Section 1 · 你的下班日常</div>
+  <div class="div"></div>
 
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q1 *</span>
-        <span class="q-block-text">你平常下班時間大約幾點？</span>
-        <span class="badge keep">保留</span>
-      </div>
-      <div class="q-block-body">
-        <div class="opts">
-          <span class="opt-pill">18:00–19:00</span>
-          <span class="opt-pill">19:00–20:00</span>
-          <span class="opt-pill">20:00–22:00</span>
-          <span class="opt-pill">22:00 以後</span>
-          <span class="opt-pill">不固定，差異很大</span>
+  <!-- 05 actions -->
+  <div class="sec">
+    <div class="sec-lbl"><span class="sec-n">05</span><h2>L5 Action Items</h2></div>
+    <div class="actions">
+      <div class="action-row">
+        <div class="an">A1</div>
+        <div class="at">
+          確認 take rate + 統一三層 tier 定義
+          <em>所有 LTV 換算的地基。take rate 65% 為未驗證假設，需 Finance confirm 後重算。Tier 定義發出作為全組共同語言。</em>
         </div>
-        <div class="q-type-note">單選</div>
-      </div>
-    </div>
-
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q2 *</span>
-        <span class="q-block-text">下班後，你最常處於哪種狀態？</span>
-        <span class="badge mod">前移自 Q10</span>
-      </div>
-      <div class="q-block-body">
-        <div class="opts">
-          <span class="opt-pill">只想趕快回家</span>
-          <span class="opt-pill">願意順路找點有趣的事</span>
-          <span class="opt-pill">看情況，視當天疲勞度</span>
-          <span class="opt-pill">偶爾會主動安排社交活動</span>
+        <div class="atags">
+          <span class="tag s">L5 自行</span>
+          <span class="tag">Finance</span>
         </div>
-        <div class="q-type-note">單選</div>
       </div>
-    </div>
-
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q3 *</span>
-        <span class="q-block-text">最近一次在通勤路上，讓你主動停下來或多看幾眼的，是哪種類型？</span>
-        <span class="badge mod">拆分自 Q4</span>
-      </div>
-      <div class="q-block-body">
-        <div class="opts">
-          <span class="opt-pill">戶外裝置 / 互動設備</span>
-          <span class="opt-pill">食物或飲品試吃試喝</span>
-          <span class="opt-pill">人群聚集 / 熱鬧場景</span>
-          <span class="opt-pill">視覺衝擊的陳設或展覽</span>
-          <span class="opt-pill">有趣的路人或表演</span>
-          <span class="opt-pill new-opt">沒有任何東西讓我停下來</span>
+      <div class="action-row">
+        <div class="an">A2</div>
+        <div class="at">
+          建構三層 Whale 觀測體系
+          <em>在 Mixpanel 分別建立流入、養成、存量三層 dashboard，加橫切的 per-Creator graduation rate 視圖。</em>
         </div>
-        <div class="q-type-note">單選</div>
-      </div>
-    </div>
-
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q4</span>
-        <span class="q-block-text">當時吸引你的核心原因是什麼？（可略）</span>
-        <span class="badge mod">拆分自 Q4</span>
-      </div>
-      <div class="q-block-body">
-        開放填答
-        <div class="q-type-note">選填 · 簡短即可</div>
-      </div>
-    </div>
-
-    <!-- Section 2 -->
-    <div class="section-divider">Section 2 · 對活動的即時反應</div>
-
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q5 *</span>
-        <span class="q-block-text">如果下班路上看到一個活動，你最可能因為哪個原因停下來？</span>
-        <span class="badge mod">選項優化</span>
-      </div>
-      <div class="q-block-body">
-        <div class="opts">
-          <span class="opt-pill">視覺上完全出乎意料（不像一般行銷）</span>
-          <span class="opt-pill">有實際補給（飲料、食物、贈品）</span>
-          <span class="opt-pill">圍觀人數多，感覺值得看</span>
-          <span class="opt-pill">有科技感或可動手互動的元素</span>
-          <span class="opt-pill">感覺和我的工作或興趣有關</span>
-          <span class="opt-pill">同事或朋友也在</span>
+        <div class="atags">
+          <span class="tag s">L5 主導</span>
+          <span class="tag">Creator Analytics</span>
         </div>
-        <div class="q-type-note">多選，最多選 2 個</div>
       </div>
-    </div>
-
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q6 *</span>
-        <span class="q-block-text">如果真的停下來參與，你希望整個體驗控制在多久以內？</span>
-        <span class="badge keep">保留</span>
-      </div>
-      <div class="q-block-body">
-        <div class="opts">
-          <span class="opt-pill">我不會停下來參與</span>
-          <span class="opt-pill">30 秒內</span>
-          <span class="opt-pill">1–2 分鐘</span>
-          <span class="opt-pill">3–5 分鐘</span>
-          <span class="opt-pill">5 分鐘以上也無妨</span>
+      <div class="action-row">
+        <div class="an">A3</div>
+        <div class="at">
+          以雙路徑框架重設 Creator Deal 評估標準
+          <em>評估頭部的兩個維度並列：whale yield（帶進多少）+ graduation acceleration（讓多少 minnow 升級）。</em>
         </div>
-        <div class="q-type-note">單選</div>
-      </div>
-    </div>
-
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q7 *</span>
-        <span class="q-block-text">整體而言，你有多願意在路邊參與一個陌生品牌的體驗活動？</span>
-        <span class="badge new">新增 Likert</span>
-      </div>
-      <div class="q-block-body">
-        線性量表：1 = 完全不願意　→　5 = 非常願意
-        <div class="q-type-note">5 點量表 · 單選</div>
-      </div>
-    </div>
-
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q8 *</span>
-        <span class="q-block-text">哪種回饋方式最可能促使你參與？</span>
-        <span class="badge mod">分類重整</span>
-      </div>
-      <div class="q-block-body">
-        （以下選項標示類型供參考，問卷中以括號呈現即可）
-        <div class="opts" style="margin-top:.6rem">
-          <span class="opt-pill">【物質型】免費補給（飲料 / 食物）</span>
-          <span class="opt-pill">【物質型】實用小物（貼紙、充電線等）</span>
-          <span class="opt-pill">【身份型】限量身份感（只給工程師 / 只有今天）</span>
-          <span class="opt-pill">【成就型】完成挑戰後的解鎖感</span>
-          <span class="opt-pill">【社交型】適合打卡的視覺場景</span>
-          <span class="opt-pill">【純粹型】夠有趣本身就是回饋</span>
+        <div class="atags">
+          <span class="tag">Jeff Chan</span>
+          <span class="tag">Yukai Chen</span>
         </div>
-        <div class="q-type-note">多選，最多選 2 個</div>
       </div>
     </div>
+  </div>
 
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q9 *</span>
-        <span class="q-block-text">哪些因素最容易讓你直接略過活動？</span>
-        <span class="badge keep">保留</span>
-      </div>
-      <div class="q-block-body">
-        <div class="opts">
-          <span class="opt-pill">要排隊等候</span>
-          <span class="opt-pill">需要填表或掃碼登錄</span>
-          <span class="opt-pill">感覺太商業、太有目的性</span>
-          <span class="opt-pill">活動太複雜、看不懂在幹嘛</span>
-          <span class="opt-pill">需要在公開場合做出反應（尷尬）</span>
-          <span class="opt-pill">不符合我的興趣</span>
-        </div>
-        <div class="q-type-note">多選</div>
-      </div>
-    </div>
+  <!-- footer -->
+  <div class="ftr">
+    <span>SWAG.LIVE — Whale Economics Observation Framework v2</span>
+    <span id="ftr-date"></span>
+  </div>
 
-    <!-- Section 3 -->
-    <div class="section-divider">Section 3 · 文案偏好測試</div>
-
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q10 *</span>
-        <span class="q-block-text">假設你在下班路上看到一個體驗攤位，旁邊立著以下其中一句話。請依照「讓你最想靠近」的程度排序。</span>
-        <span class="badge mod">擴充+排序化</span>
-      </div>
-      <div class="q-block-body">
-        <div class="opts">
-          <span class="opt-pill">⚠ 系統異常——限今日排查</span>
-          <span class="opt-pill">深夜補給已送達，限量領取中</span>
-          <span class="opt-pill">你的工程師身份已解鎖隱藏任務</span>
-          <span class="opt-pill">竹科限定，只有今天</span>
-        </div>
-        <div class="q-type-note">排序題（1 = 最想靠近）</div>
-      </div>
-    </div>
-
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q11 *</span>
-        <span class="q-block-text">什麼情況下你會主動把這個活動分享給同事或朋友？</span>
-        <span class="badge mod">選項重整</span>
-      </div>
-      <div class="q-block-body">
-        <div class="opts">
-          <span class="opt-pill">內容本身夠怪、夠罕見</span>
-          <span class="opt-pill">有明確的實用資訊（優惠 / 資源）</span>
-          <span class="opt-pill">有獎勵機制（帶人來有好處）</span>
-          <span class="opt-pill">感覺同事會有共鳴</span>
-          <span class="opt-pill new-opt">我幾乎不會主動分享這類活動</span>
-        </div>
-        <div class="q-type-note">多選，最多選 3 個</div>
-      </div>
-    </div>
-
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q12</span>
-        <span class="q-block-text">你看過最讓你覺得「這品牌懂工程師」的活動或行銷形式是什麼？</span>
-        <span class="badge keep">保留</span>
-      </div>
-      <div class="q-block-body">
-        開放填答
-        <div class="q-type-note">選填</div>
-      </div>
-    </div>
-
-    <!-- Section 4 -->
-    <div class="section-divider">Section 4 · 關於你</div>
-
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q13 *</span>
-        <span class="q-block-text">目前的工作職能類型</span>
-        <span class="badge mod">後移</span>
-      </div>
-      <div class="q-block-body">
-        <div class="opts">
-          <span class="opt-pill">軟體</span>
-          <span class="opt-pill">硬體</span>
-          <span class="opt-pill">韌體</span>
-          <span class="opt-pill">PM</span>
-          <span class="opt-pill">資料</span>
-          <span class="opt-pill">設備</span>
-          <span class="opt-pill">其他</span>
-        </div>
-        <div class="q-type-note">單選</div>
-      </div>
-    </div>
-
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q14 *</span>
-        <span class="q-block-text">工作年資</span>
-        <span class="badge keep">保留</span>
-      </div>
-      <div class="q-block-body">
-        <div class="opts">
-          <span class="opt-pill">0–2 年</span>
-          <span class="opt-pill">3–5 年</span>
-          <span class="opt-pill">6–8 年</span>
-          <span class="opt-pill">8 年以上</span>
-        </div>
-        <div class="q-type-note">單選</div>
-      </div>
-    </div>
-
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">Q15 *</span>
-        <span class="q-block-text">年齡層</span>
-        <span class="badge new">新增</span>
-      </div>
-      <div class="q-block-body">
-        <div class="opts">
-          <span class="opt-pill">24 歲以下</span>
-          <span class="opt-pill">25–29</span>
-          <span class="opt-pill">30–34</span>
-          <span class="opt-pill">35–39</span>
-          <span class="opt-pill">40 歲以上</span>
-        </div>
-        <div class="q-type-note">單選</div>
-      </div>
-    </div>
-
-    <div class="q-block">
-      <div class="q-block-head">
-        <span class="q-num-tag">末 Q</span>
-        <span class="q-block-text">我們後續可能進行 15 分鐘一對一深訪，如有興趣請留下 Email（選填）</span>
-        <span class="badge new">新增</span>
-      </div>
-      <div class="q-block-body">
-        開放填答（Email 格式）
-        <div class="q-type-note">選填 · 填寫即代表同意以此聯繫，不影響本次問卷結果</div>
-      </div>
-    </div>
-
-  </section>
-
-</main>
-
-<footer>
-  <span>竹科工程師生活型態與線下互動行為調查 · 問卷審閱意見</span>
-  <span>2026-05 · 共 15 題 · 填寫時間約 3–4 分鐘</span>
-</footer>
-
+</div>
+<script>
+  const d = new Date().toLocaleDateString('zh-TW', {year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('doc-date').textContent = d;
+  document.getElementById('ftr-date').textContent = d;
+  setTimeout(() => {
+    document.getElementById('bw').style.width = '72%';
+    document.getElementById('bd').style.width = '20%';
+    document.getElementById('bm').style.width = '8%';
+  }, 400);
+</script>
 </body>
 </html>
